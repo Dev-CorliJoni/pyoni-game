@@ -2,7 +2,7 @@ import pygame
 from pygame import locals
 from pygame.locals import *
 
-from pyonigame.helper import DirObject
+from pyonigame.helper import DictObject
 from pyonigame.ui.pygame_ import SpriteSheetLoader, FontLoader
 
 
@@ -72,14 +72,14 @@ class PygameObserver:
             if event.type == QUIT:
                 self.quit()
             elif event.type == WINDOWFOCUSGAINED or event.type == WINDOWFOCUSLOST:
-                yield DirObject({"type": "focus", "value": event.type == WINDOWFOCUSGAINED})
+                yield DictObject({"type": "focus", "value": event.type == WINDOWFOCUSGAINED})
             elif event.type in (KEYDOWN, KEYUP) and event.key in self._key_events and "K_" in self._key_events[event.key]:
                 value, unicode = self._key_events[event.key].replace("K_", "").lower(), event.unicode
                 type_ = "key" if event.type == KEYDOWN else "key_end"
 
                 #if not (event.mod & KMOD_SHIFT) and len(value) == 1:
                 #    unicode = unicode.lower()
-                yield DirObject({"type": type_, "value": f"{value}", "unicode": f"{unicode}"})
+                yield DictObject({"type": type_, "value": f"{value}", "unicode": f"{unicode}"})
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button in (BUTTON_WHEELUP, BUTTON_WHEELDOWN):
@@ -97,14 +97,14 @@ class PygameObserver:
                 rect = pygame.Rect(obj.x, obj.y, obj.width, obj.height)
                 if rect.collidepoint(mouse_pos):
                     if clicked != "":
-                        yield DirObject({"type": "click", "id": obj.id, "pos": mouse_pos, "button": clicked})
+                        yield DictObject({"type": "click", "id": obj.id, "pos": mouse_pos, "button": clicked})
                     elif click_released != "":
-                        yield DirObject({"type": "click_end", "id": obj.id, "pos": mouse_pos, "button": click_released})
+                        yield DictObject({"type": "click_end", "id": obj.id, "pos": mouse_pos, "button": click_released})
                     if scroll != "":
-                        yield DirObject({"type": "scroll", "id": obj.id, "pos": mouse_pos, "value": scroll})
-                    yield DirObject({"type": "hover", "id": obj.id, "pos": mouse_pos})
+                        yield DictObject({"type": "scroll", "id": obj.id, "pos": mouse_pos, "value": scroll})
+                    yield DictObject({"type": "hover", "id": obj.id, "pos": mouse_pos})
 
-    def update(self, updates: list[DirObject]):
+    def update(self, updates: list[DictObject]):
 
         for obj in filter(lambda o: o.type == "command", updates):
             if obj.value == "quit":

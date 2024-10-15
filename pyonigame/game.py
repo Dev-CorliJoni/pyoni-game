@@ -1,5 +1,5 @@
 from time import time
-from pyonigame.helper import DirObject
+from pyonigame.helper import DictObject
 from pyonigame.view.subject import Subject
 
 
@@ -14,7 +14,7 @@ class Game:
         # try:
         while self.running:
             inputs = list(self.subject.get_inputs())
-            inputs.insert(0, DirObject(type="passed_time", value=f"{self.get_passed_time()}"))
+            inputs.insert(0, DictObject(type="passed_time", value=f"{self.get_passed_time()}"))
 
             updates = self.controller.update([i for i in inputs if i is not None])
             self.subject.update(updates)

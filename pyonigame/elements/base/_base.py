@@ -1,4 +1,4 @@
-from pyonigame.helper import DirObject
+from pyonigame.helper import DictObject
 
 
 class Base:
@@ -26,6 +26,6 @@ class Base:
         post_change_func()
 
         vars_ = vars(self)
-        obj = DirObject({key: vars_[key] for key in vars_ if not key.startswith("_") and key == key.lower()})
+        obj = DictObject({key: vars_[key] for key in vars_ if not key.startswith("_") and key == key.lower()})
         self.state_changed = False
         return obj

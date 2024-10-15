@@ -1,6 +1,6 @@
-class DirObject(dict):
-    def __init__(self, *args, encapsulation=lambda v: DirObject(v), **kwargs):
-        super(DirObject, self).__init__(*args, **kwargs)
+class DictObject(dict):
+    def __init__(self, *args, encapsulation=lambda v: DictObject(v), **kwargs):
+        super(DictObject, self).__init__(*args, **kwargs)
 
         for key, value in self.items():
             if isinstance(value, dict):
@@ -22,13 +22,13 @@ class DirObject(dict):
             raise AttributeError(f"'DirObject' object has no attribute '{key}'")
 
     def copy(self):
-        return DirObject(super().copy())
+        return DictObject(super().copy())
 
     def override(self, dir_object):
         def adopt_list(self_list, list_):
             for item in list_:
-                if isinstance(item, DirObject):
-                    self_list.append(DirObject())
+                if isinstance(item, DictObject):
+                    self_list.append(DictObject())
                     self_list[-1].override(item)
                 if isinstance(item, list):
                     self_list.append(adopt_list([], item))
@@ -37,9 +37,9 @@ class DirObject(dict):
             return self_list
 
         for key, value in dir_object.items():
-            if isinstance(value, DirObject):
+            if isinstance(value, DictObject):
                 if not hasattr(self, key):
-                    setattr(self, key, DirObject())
+                    setattr(self, key, DictObject())
                 getattr(self, key).override(value)
             elif isinstance(value, list):
                 setattr(self, key, adopt_list([], value))
@@ -49,7 +49,7 @@ class DirObject(dict):
     def to_dict(self):
         result = {}
         for key, value in self.items():
-            if isinstance(value, DirObject):
+            if isinstance(value, DictObject):
                 result[key] = value.to_dict()
             else:
                 result[key] = value

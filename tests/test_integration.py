@@ -1,5 +1,5 @@
 import unittest
-from pyonigame.helper import DirObject
+from pyonigame.helper import DictObject
 from pyonigame.ui import PygameObserver
 from pyonigame.view import Subject
 from pyonigame import Game
@@ -17,7 +17,7 @@ class TestIntegration(unittest.TestCase):
 
     def test_integration(self):
         try:
-            settings = DirObject({
+            settings = DictObject({
                     "caption": "My Game!",
                     "display": {
                         "mode": "dimension",

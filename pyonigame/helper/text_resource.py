@@ -1,7 +1,7 @@
-from pyonigame.helper import DirObject, DirObjectIO
+from pyonigame.helper import DictObject, IODictObject
 
 
-class _TextResource(DirObject):
+class _TextResource(DictObject):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, encapsulation=lambda v: _TextResource(v))
@@ -16,4 +16,14 @@ class _TextResource(DirObject):
 
 class TextResource(_TextResource):
     def __init__(self, path):
-        super().__init__(DirObjectIO(path).load())
+        super().__init__(IODictObject(path).load())
+
+
+def deliver_text_resource(path):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            resource = TextResource(path)
+            return func(resource, *args, **kwargs)
+
+        return wrapper
+    return decorator
