@@ -1,0 +1,23 @@
+{
+  "buttons": {
+    "0": "action_right",
+    "1": "action_down",
+    "2": "action_up",
+    "3": "action_left",
+    "5": "home",
+    "6": "option_1",
+    "7": "joystick_1_click",
+    "9": "trigger_left",
+    "10": "trigger_right"
+    },
+  "axes": {
+    "0": {
+      "name": "joystick_1",
+      "axis": "horizontal"
+    },
+    "1": {
+      "name": "joystick_1",
+      "axis": "vertical"
+    }
+  }
+}
