@@ -1,3 +1,3 @@
-import pyonigame.elements.base
-import pyonigame.elements.controls
-import pyonigame.elements.groups
+import pyonigame.components.base
+import pyonigame.components.controls
+import pyonigame.components.groups

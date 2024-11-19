@@ -5,7 +5,7 @@ from pyonigame.events import Request
 from pyonigame.models import DictObject
 
 
-class Observer(ABC):
+class UIObserver(ABC):
 
     def __init__(self) -> None:
         self.opened: bool = False

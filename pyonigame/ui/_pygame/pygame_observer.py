@@ -7,12 +7,12 @@ from pygame.locals import *
 from pyonigame.models.settings import DisplayMode
 from pyonigame.events import Request
 from pyonigame.models import DictObject
-from pyonigame.helper.resource_path_provider import get_resource_path
-from pyonigame.ui.pygame_ import SpriteSheetLoader, FontLoader
-from pyonigame.templates import Observer
+from pyonigame.helper._resource_path_provider import get_resource_path
+from pyonigame.ui._pygame import SpriteSheetLoader, FontLoader
+from pyonigame.templates import UIObserver
 
 
-class PygameObserver(Observer):
+class PygameObserver(UIObserver):
 
     def __init__(self) -> None:
         super().__init__()
@@ -27,6 +27,9 @@ class PygameObserver(Observer):
         self._fps: int = 60
         self._vsync: bool = False
         self._refresh: bool = True
+        self._provide_text_shape_resolver: bool = False
+
+        self._screen_changed = None
 
         self._clock = None
         self._screen = None
@@ -50,23 +53,32 @@ class PygameObserver(Observer):
         for font in settings.custom_fonts:
             self._font_loader.add_font(font.name, font.font_path)
 
+        if self._screen is not None:
+            screen_info = pygame.display.Info()
+            old_width, old_height = screen_info.current_w, screen_info.current_h
+        else:
+            old_width, old_height = 0, 0
+
+        new_width, new_height = settings.dimension.width, settings.dimension.height
+
         if settings.mode == DisplayMode.FULLSCREEN:
             self._create_screen((0, 0), self._vsync, pygame.FULLSCREEN)
             # change settings dimension
             dimension = self._screen.get_size()
-            settings.dimension.width = dimension[0]
-            settings.dimension.height = dimension[1]
+            new_width = dimension[0]
+            new_height = dimension[1]
         elif settings.mode == DisplayMode.DIMENSION:
-            dimension = settings.dimension
             # get the highest width and height of all attached screens
             display_sizes = pygame.display.get_desktop_sizes()
             max_width, max_height = max([size[0] for size in display_sizes]), max([size[1] for size in display_sizes])
             # check if the window is visible on the screen and if not don't reset the window
-            if dimension.width > max_width or dimension.height > max_height:
-                screen_info = pygame.display.Info()
-                dimension.width, dimension.height = screen_info.current_w, screen_info.current_h
+            if new_width > max_width or new_height > max_height:
+                new_width, new_height = old_width, old_height
 
-            self._create_screen((dimension.width, dimension.height), self._vsync)
+            self._create_screen((new_width, new_height), self._vsync)
+
+        if old_width != new_width or old_height != new_height:
+            self._screen_changed = {"width": new_width, "height": new_height}
 
         if hasattr(settings, "icon"):
             icon_path = settings.icon
@@ -78,20 +90,24 @@ class PygameObserver(Observer):
 
         pygame.display.set_caption(settings.caption)
         self._clock = pygame.time.Clock()
-
-        self._screen.fill((255, 255, 255))
-        pygame.display.flip()
-
         self.opened = True
 
     def get_inputs(self) -> Generator[DictObject, None, None]:
         clicked, click_released, scroll = ("",) * 3
         events = pygame.event.get()
 
+        if self._provide_text_shape_resolver:
+            self._provide_text_shape_resolver = False
+            yield DictObject({"type": "request_answer", "answer_type": "text_shape_resolver", "value": self.get_font_dimension})
+
+        if self._screen_changed is not None:
+            yield DictObject({"type": "screen_size", **self._screen_changed})
+            self._screen_changed = None
+
         # event.type == pygame.MOUSEMOTION
         for event in events:
             if event.type == QUIT:
-                self._quit()
+                yield DictObject({"type": "quit"})
             elif event.type == WINDOWFOCUSGAINED or event.type == WINDOWFOCUSLOST:
                 yield DictObject({"type": "window_focus_changed", "value": event.type == WINDOWFOCUSGAINED})
             elif event.type in (KEYDOWN, KEYUP) and event.key in self._key_events and "K_" in self._key_events[event.key]:
@@ -147,6 +163,11 @@ class PygameObserver(Observer):
                 self._refresh = True
             elif obj.type == "refresh_settings":
                 self.apply_settings(obj.data)
+            elif obj.type == "text_shape_resolver":
+                self._provide_text_shape_resolver = True
+
+        if self._refresh:
+            self._screen.fill((255, 255, 255))
 
         for update_data in sorted(filter(self._filter_updates, updates), key=lambda u: self._sort_order.index(u.layer)):
             if update_data.type in ("sprite", "animation"):

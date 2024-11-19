@@ -1,4 +1,4 @@
-from pyonigame.elements.base import EventBase, CoordinateBase, ShapeBase
+from pyonigame.components.base import EventBase, CoordinateBase, ShapeBase
 from pyonigame.events import Event
 
 

@@ -9,11 +9,11 @@ class Sprite(ImageBase):
 
     def __init__(self, x, y, sprite_data: SpriteData, layer=ImageBase.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE, scale_factor=1):
         self.sprite_coordinates = sprite_data.locator_tuple()
-        if sprite_data.is_location_empty():
+        if sprite_data.is_locator_empty():
             width, height = Image.open(sprite_data.image_path).size
             width, height = width * scale_factor, height * scale_factor
             self.sprite_coordinates = (0, 0, width, height)
-        elif sprite_data.is_location_valid():
+        elif sprite_data.is_locator_valid():
             width, height = self.sprite_coordinates[2] * scale_factor, self.sprite_coordinates[3] * scale_factor
         else:
             raise ValueError("Sprite data x, y, width and height have to be set or all set to None!")

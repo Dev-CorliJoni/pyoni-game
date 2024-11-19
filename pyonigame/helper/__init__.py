@@ -1,3 +1,2 @@
-from pyonigame.helper.dict_object import DictObject
+# Todo Check if this is necessary to access for anyone
 from pyonigame.helper.dict_object_io import IODictObject
-from pyonigame.helper.text_resource import TextResource, deliver_text_resource

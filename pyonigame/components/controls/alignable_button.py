@@ -1,4 +1,4 @@
-from pyonigame.elements.controls import Button, ButtonStyle
+from pyonigame.components.controls import Button, ButtonStyle
 
 
 class Style(ButtonStyle):

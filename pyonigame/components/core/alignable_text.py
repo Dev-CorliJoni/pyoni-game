@@ -1,6 +1,6 @@
 from pyonigame.events import Event
 
-from pyonigame.components.base import Text
+from pyonigame.components.core import Text
 
 
 class AlignableText(Text):

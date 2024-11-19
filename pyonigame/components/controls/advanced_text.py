@@ -1,4 +1,4 @@
-from pyonigame.elements.base import AlignableText, Rect
+from pyonigame.components.core import AlignableText, Rect
 
 
 class Style:

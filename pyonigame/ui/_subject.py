@@ -12,8 +12,8 @@ class Subject:
                     yield input_
 
         # Todo Maybe obsolete since EventManager could stop the event
-        if all([observer.opened is False for observer in self._observers]):
-            yield None
+        """if all([observer.opened is False for observer in self._observers]):
+            yield None"""
 
     def get_font_dimensions(self, text, font, size):
         # Todo Remove if request and request answer implemented

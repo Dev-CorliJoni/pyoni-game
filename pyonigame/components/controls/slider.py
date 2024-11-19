@@ -1,6 +1,6 @@
 from functools import partial
-from pyonigame.elements.controls import Text, TextBox, TextBoxStyle, Button, ButtonStyle
-from pyonigame.elements.controls.validators import StringValidator
+from pyonigame.components.controls import Text, TextBox, TextBoxStyle, Button, ButtonStyle
+from pyonigame.components.controls.validators import StringValidator
 
 
 class Style(TextBoxStyle):

@@ -1,4 +1,4 @@
-from pyonigame.elements.controls.validators.regex_validator import _is_int
+from pyonigame.components.controls.validators.regex_validator import _is_int
 
 
 class IntValidator:

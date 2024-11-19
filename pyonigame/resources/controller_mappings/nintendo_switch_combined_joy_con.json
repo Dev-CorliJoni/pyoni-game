@@ -1,0 +1,155 @@
+{
+  "joy_cons": {
+    "left": 1,
+    "right": 0
+  },
+
+  "buttons": {
+    "0": {
+      "joy_con": "right",
+      "name": {
+        "split": "action_down",
+        "combined": "action_right"
+      }
+    },
+    "1": {
+      "joy_con": "right",
+      "name": {
+        "split": "action_left",
+        "combined": "action_down"
+      }
+    },
+    "2": {
+      "joy_con": "right",
+      "name": {
+        "split": "action_right",
+        "combined": "action_up"
+      }
+    },
+    "3": {
+      "joy_con": "right",
+      "name": {
+        "split": "action_up",
+        "combined": "action_left"
+      }
+    },
+    "4": {
+      "joy_con": "left",
+      "name": {
+        "split": "option_primary",
+        "combined": "option_secondary"
+      }
+    },
+    "5": {
+      "joy_con": "right",
+      "name": "home"
+    },
+    "6": {
+      "joy_con": "right",
+      "name": "option_primary"
+    },
+    "7": {
+      "joy_con": "left",
+      "name": "joystick_primary_click"
+    },
+    "8": {
+      "joy_con": "right",
+      "name": {
+        "split": "joystick_primary_click",
+        "combined": "joystick_secondary_click"
+      }
+    },
+    "11": {
+      "joy_con": "left",
+      "name": {
+        "split": "action_left",
+        "combined": "up"
+      }
+    },
+    "12": {
+      "joy_con": "left",
+      "name": {
+        "split": "action_right",
+        "combined": "down"
+      }
+    },
+    "13": {
+      "joy_con": "left",
+      "name": {
+        "split": "action_down",
+        "combined": "left"
+      }
+    },
+    "14": {
+      "joy_con": "left",
+      "name": {
+        "split": "action_up",
+        "combined": "right"
+      }
+    },
+    "15": {
+      "joy_con": "left",
+      "name": {
+        "split": "home",
+        "combined": "capture"
+      }
+    },
+    "16": {
+      "joy_con": "right",
+      "name": "trigger_right"
+    },
+    "17": {
+      "joy_con": "left",
+      "name": "trigger_left"
+    },
+    "18": {
+      "joy_con": "right",
+      "name": "trigger_left"
+    },
+    "19": {
+      "joy_con": "left",
+      "name": "trigger_right"
+    }
+  },
+
+  "axes": {
+    "0": {
+      "type": "joystick",
+      "joy_con": "left",
+      "name": "primary",
+      "axis": "horizontal"
+    },
+    "1": {
+      "type": "joystick",
+      "joy_con": "left",
+      "name": "primary",
+      "axis": "vertical"
+    },
+    "2": {
+      "type": "joystick",
+      "joy_con": "right",
+      "name": {
+        "split": "primary",
+        "combined": "secondary"
+      },
+      "axis": "horizontal"
+    },
+    "3": {
+      "type": "joystick",
+      "joy_con": "right",
+      "name": {
+        "split": "primary",
+        "combined": "secondary"
+      },
+      "axis": "vertical"
+    },
+    "4": {
+      "type": "button",
+      "name": "trigger_left"
+    },
+    "5": {
+      "type": "button",
+      "name": "trigger_right"
+    }
+  }
+}

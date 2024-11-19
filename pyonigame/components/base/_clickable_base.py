@@ -1,4 +1,4 @@
-from pyonigame.elements.base import Base, CoordinateBase, ShapeBase
+from pyonigame.components.base import Base, CoordinateBase, ShapeBase
 
 
 class ClickableBase(Base, CoordinateBase, ShapeBase):

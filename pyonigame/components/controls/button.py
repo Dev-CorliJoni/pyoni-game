@@ -1,6 +1,6 @@
 from functools import partial
 
-from pyonigame.elements.controls import AdvancedText, AdvancedTextStyle
+from pyonigame.components.controls import AdvancedText, AdvancedTextStyle
 
 
 class Style(AdvancedTextStyle):

@@ -3,8 +3,8 @@ import pygame
 from threading import Thread
 
 from pyonigame.models import DictObject
-from pyonigame.ui.pygame_.controller import Controller
-from pyonigame.helper.resource_path_provider import get_resource_path
+from pyonigame.ui._pygame.controller import Controller
+from pyonigame.helper._resource_path_provider import get_resource_path
 
 
 def load_controller_mapping(path, controller):

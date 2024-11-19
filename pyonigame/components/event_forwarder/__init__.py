@@ -1,2 +1,2 @@
-from pyonigame.components.event_communication._parent_component import ParentComponent
-from pyonigame.components.event_communication._child_component import child_component
+from pyonigame.components.event_forwarder._parent_component import ParentComponent
+from pyonigame.components.event_forwarder._child_component import child_component, create_child_component_type

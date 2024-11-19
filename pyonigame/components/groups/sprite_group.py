@@ -1,26 +1,42 @@
-from pyonigame.elements.base import CoordinateBase, ShapeBase, Base
+from pyonigame.events import Event
+from pyonigame.models.components import SpriteData
+from pyonigame.components.event_forwarder import ParentComponent, create_child_component_type
+from pyonigame.components.base import CoordinateBase, ShapeBase, Base
+from pyonigame.components.core import Sprite
 
 
-class SpriteGroup(CoordinateBase, ShapeBase):
+class SpriteGroup(CoordinateBase, ShapeBase, ParentComponent):
 
     Layer = Base.Layer
 
-    # coordinate list example (((c1.x, c1.y), (c2.x, c2.y)), ((c3.x, c3.y), (c4.x, c4.y)))
-    def __init__(self, x, y, loader, coordinate_list, scale_factor=1, layer=Base.Layer.GAME_ELEMENT):
+    def __init__(self, x, y, sprite_data_list: list[list[SpriteData]], scale_factor=1, layer=Base.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE):
+        """
+
+        :param x: The x-coordinate on the UI.
+        :param y: The y-coordinate on the UI.
+        :param sprite_data_list: A nested list of `SpriteData` objects. For example, a 2x2 grid of sprites would look like:
+            ((SpriteData(...), SpriteData(...)),
+             (SpriteData(...), SpriteData(...)))
+        :param scale_factor: The factor by which to scale the sprites.
+        :param layer: Specifies the layer of the UI in hierarchical order. Layers are arranged from back to front as follows: BACKGROUND -> GAME_ELEMENT -> CONTROL.
+        :param event_subscription: Defines the events that the object will subscribe to
+        """
         super().__init__(x, y)
+        super(ParentComponent, self).__init__()
+        child_type = create_child_component_type(Sprite)
 
         self.sprites = []
         max_x = 0
 
-        max_sprite_width = max(c[2] for i in range(len(coordinate_list)) for c in coordinate_list[i] if len(c) == 4) * scale_factor
-        max_sprite_height = max(c[3] for i in range(len(coordinate_list)) for c in coordinate_list[i] if len(c) == 4) * scale_factor
+        max_sprite_width = max(sprite_data.width for i in range(len(sprite_data_list)) for sprite_data in sprite_data_list[i] if sprite_data.is_locator_valid()) * scale_factor
+        max_sprite_height = max(sprite_data.height for i in range(len(sprite_data_list)) for sprite_data in sprite_data_list[i] if sprite_data.is_locator_valid()) * scale_factor
 
-        for i in range(len(coordinate_list)):
-            for coordinate in coordinate_list[i]:
-                if len(coordinate) > 0:
-                    self.sprites.append(loader.create_sprite(coordinate, x=x, y=y, scale_factor=scale_factor, layer=layer))
+        for i in range(len(sprite_data_list)):
+            for sprite_data in sprite_data_list[i]:
+                if sprite_data.is_locator_valid():
+                    self.sprites.append(child_type(self, x, y, sprite_data, scale_factor=scale_factor, layer=layer, event_subscription=event_subscription))
 
-                if coordinate_list[i][-1] == coordinate:
+                if sprite_data_list[i][-1] is sprite_data:
                     y = y + max_sprite_height
                     max_x = x + max_sprite_width
                     x = self.x

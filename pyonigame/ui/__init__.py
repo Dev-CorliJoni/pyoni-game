@@ -1,1 +1,1 @@
-from pyonigame.ui.pygame_ import PygameObserver
+from pyonigame.ui._pygame import PygameObserver

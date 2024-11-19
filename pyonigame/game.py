@@ -1,25 +1,30 @@
 from time import time
-from pyonigame.helper import DictObject
-from pyonigame.view.subject import Subject
+
+from pyonigame.models.settings import Settings
+from pyonigame.templates import ContextController, UIObserver
+from pyonigame.events.application_manager import ApplicationManager
+from pyonigame.ui._subject import Subject
 
 
 class Game:
-    def __init__(self, controller, *observers):
+    def __init__(self, controller: ContextController, settings: Settings, *observers: UIObserver) -> None:
         self.controller = controller
-        self.subject = Subject(*observers)
+        ApplicationManager.SETTINGS = settings
+        self.subject = Subject(settings.view, *observers)
         self.running = True
         self.last_update_time = time()
 
     def run(self):
-        # try:
         while self.running:
             inputs = list(self.subject.get_inputs())
-            inputs.insert(0, DictObject(type="passed_time", value=f"{self.get_passed_time()}"))
+            ApplicationManager.process_inputs(inputs)
 
-            updates = self.controller.update([i for i in inputs if i is not None])
-            self.subject.update(updates)
+            updates = self.controller.update(self.get_passed_time())
 
-            self.running = all([i is not None for i in inputs])
+            requests = list(ApplicationManager.generate_requests())
+            self.subject.update(requests, updates)
+
+            self.running = all([r.type != "quit" for r in requests])
 
     # except Exception as e:
     #    print(repr(e))

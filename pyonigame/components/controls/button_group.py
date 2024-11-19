@@ -1,4 +1,4 @@
-from pyonigame.elements.controls import AlignableButton
+from pyonigame.components.controls import AlignableButton
 
 
 class ButtonGroup:

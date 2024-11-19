@@ -1,5 +1,4 @@
 import argparse
-from pyonigame.models import DictObject
 from pyonigame.models.settings import Settings
 
 
@@ -13,5 +12,5 @@ def main():
     args = parser.parse_args()
 
     if args.command == "create-settings":
-        settings = Settings.from_dict_object(DictObject())
+        settings = Settings.default_settings()
         settings.save(args.path)

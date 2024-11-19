@@ -1,4 +1,4 @@
-from pyonigame.ui.pygame_.controller import ControllerBase
+from pyonigame.ui._pygame.controller import ControllerBase
 
 
 class Controller(ControllerBase):
