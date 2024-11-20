@@ -86,7 +86,7 @@ class ApplicationManager:
         ApplicationManager.REQUESTS[request.id] = (requester, request)
 
     @staticmethod
-    def set_event_subscriptions(obj, event: Event) -> None:
+    def set_event_subscription(obj, event: Event) -> None:
         for e in Event:
             # Creating defaults for the events
             if e not in ApplicationManager.EVENT_SUBSCRIPTIONS:

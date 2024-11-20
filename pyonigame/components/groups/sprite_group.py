@@ -18,7 +18,8 @@ class SpriteGroup(CoordinateBase, ShapeBase, ParentComponent):
             ((SpriteData(...), SpriteData(...)),
              (SpriteData(...), SpriteData(...)))
         :param scale_factor: The factor by which to scale the sprites.
-        :param layer: Specifies the layer of the UI in hierarchical order. Layers are arranged from back to front as follows: BACKGROUND -> GAME_ELEMENT -> CONTROL.
+        :param layer: Specifies the hierarchical layer the element belongs to.
+               Layers are arranged from back to front as follows: BACKGROUND -> GAME_ELEMENT -> CONTROL.
         :param event_subscription: Defines the events that the object will subscribe to
         """
         super().__init__(x, y)
