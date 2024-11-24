@@ -1,5 +1,7 @@
+from components.base import EventBase
+from pyonigame.models import DictObject
 from pyonigame.events import Event
-from pyonigame.models.components import SpriteData
+from pyonigame.models.components.image_data import SpriteData
 from pyonigame.components.event_forwarder import ParentComponent, create_child_component_type
 from pyonigame.components.base import CoordinateBase, ShapeBase, Base
 from pyonigame.components.core import Sprite
@@ -9,7 +11,7 @@ class SpriteGroup(CoordinateBase, ShapeBase, ParentComponent):
 
     Layer = Base.Layer
 
-    def __init__(self, x, y, sprite_data_list: list[list[SpriteData]], scale_factor=1, layer=Base.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE):
+    def __init__(self, x: float, y: float, sprite_data_list: list[list[SpriteData]], scale_factor: float = 1, layer: Base.Layer = Base.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE):
         """
 
         :param x: The x-coordinate on the UI.
@@ -46,19 +48,32 @@ class SpriteGroup(CoordinateBase, ShapeBase, ParentComponent):
 
         ShapeBase.__init__(self, max_x - self.x, y - self.y)
 
-    def update(self, inputs):
-        return [sprite.update(inputs) for sprite in self.sprites]
+    def update(self, passed_time: float) -> list[DictObject]:
+        """
+        Updates the object and generates a list of DictObject representations of the underlying sprites.
 
-    def move(self, dx, dy):
+        :param passed_time: The time the object was updated.
+
+        :return : list of DictObject representations of the underlying sprites.
+        """
+        return [sprite.update(passed_time) for sprite in self.sprites]
+
+    def move(self, dx: float, dy: float) -> None:
+        """
+        Moves the coordinates of the underlying sprites by the specified deltas.
+
+        :param dx: The amount of pixels to move the x-coordinate on the UI.
+        :param dy: The amount of pixels to move the y-coordinate on the UI.
+        """
         super().move(dx, dy)
         for sprite in self.sprites:
             sprite.move(dx, dy)
 
     @property
-    def state_changed(self):
+    def state_changed(self) -> bool:
         return any([sprite.state_changed for sprite in self.sprites])
 
     @state_changed.setter
-    def state_changed(self, value):
+    def state_changed(self, value: bool) -> None:
         for sprite in self.sprites:
             sprite.state_changed = value

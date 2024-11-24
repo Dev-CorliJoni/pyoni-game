@@ -6,16 +6,17 @@ class ImageBase(EventBase, CoordinateBase, ShapeBase):
     """
     Represents base class for an image element.
     """
-    def __init__(self, type_, layer, image_path, x, y, width, height, scale_factor, image_rotation, mirror_x, mirror_y, event_subscription: Event):
+    def __init__(self, type_, layer, x, y, width, height, sprite_coordinates: tuple[int, int, int, int], image_path, scale_factor, image_rotation, mirror_x, mirror_y, event_subscription: Event):
         """
         :param type_: The type of the game element.
         :param layer: Specifies the hierarchical layer the element belongs to.
                Layers are arranged from back to front as follows: BACKGROUND -> GAME_ELEMENT -> CONTROL.
-        :param image_path: The file path to the image to be displayed.
         :param x: The x-coordinate of the image's position on the UI.
         :param y: The y-coordinate of the image's position on the UI.
         :param width: The width of the image.
         :param height: The height of the image.
+        :param image_path: The file path to the image to be displayed.
+        :param sprite_coordinates: The x, y, width, height coordinates of the sprite sheet.
         :param scale_factor: The factor by which the image is scaled.
         :param image_rotation: The rotation angle of the image (in degrees).
         :param mirror_x: Whether to mirror the image along the x-axis (True or False).
@@ -27,6 +28,7 @@ class ImageBase(EventBase, CoordinateBase, ShapeBase):
         ShapeBase.__init__(self, width, height)
 
         self.path = image_path
+        self.sprite_coordinates = sprite_coordinates
 
         self.image_scale = scale_factor
         self.image_rotation = image_rotation

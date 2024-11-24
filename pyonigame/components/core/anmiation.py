@@ -1,25 +1,35 @@
+from pyonigame.models.components.image_data import AnimationData
 from pyonigame.components.base import ImageBase
 from pyonigame.events import Event
 
 
 class Animation(ImageBase):
 
-    def __init__(self, image_path, *animation_coordinates, x, y, interval, layer=ImageBase.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE, scale_factor=1, image_rotation=0, mirror_x=False, mirror_y=False):
-        width, height = animation_coordinates[0][2] * scale_factor, animation_coordinates[0][3] * scale_factor
-        super().__init__("animation", layer, image_path, x, y, width, height, scale_factor, image_rotation, mirror_x, mirror_y, event_subscription)
+    def __init__(self, x, y, animation_data: AnimationData, layer=ImageBase.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE, scale_factor=1):
+        super().__init__("animation", layer, x, y, 0, 0, (0, 0, 0, 0), "", scale_factor, 0, False, False, event_subscription)
 
-        self._interval = interval
-        self._current_interval = interval
+        self._animation_data = animation_data
+        self._current_index = -1
+        self._current_interval = 0
 
-        self.animation_coordinates = animation_coordinates
-        self.current_image = 0
+    @property
+    def _current_image(self):
+        return self._animation_data[self._current_index]
 
-    def update(self, inputs, **kwargs):
-        passed_time = float(next(filter(lambda i: i.type == "passed_time", inputs)).value)
+    def _next_sprite(self):
+        self._current_index = (self._current_index + 1) % len(self._animation_data)
+        img = self._current_image
 
+        self._current_interval = img.interval
+        self.path = img.image_path
+        self.width, self.height = img.width * self.image_scale, img.height * self.image_scale
+        self.sprite_coordinates = img.locator_tuple()
+        self.image_rotation = img.image_rotation
+        self.image_mirrored_x, self.image_mirrored_y = img.mirror_x, img.mirror_y
+
+    def update(self, passed_time: float):
         self._current_interval -= passed_time
         if self._current_interval <= 0:
-            self._current_interval = self._interval
-            self.current_image = (self.current_image + 1) % len(self.animation_coordinates)
+            self._next_sprite()
 
-        return super().update(inputs, **kwargs)
+        return super().update(passed_time)

@@ -1,5 +1,4 @@
-import pyonigame.components.controls.validators
-from pyonigame.components.core import AlignableText, Text
+from pyonigame.components.core import Text, AlignableText
 from pyonigame.components.controls.advanced_text import AdvancedText, Style as AdvancedTextStyle
 from pyonigame.components.controls.button import Button, Style as ButtonStyle
 from pyonigame.components.controls.alignable_button import AlignableButton, Style as AlignableButtonStyle

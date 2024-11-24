@@ -176,11 +176,7 @@ class PygameObserver(UIObserver):
                 else:
                     sprite_sheet = self._sprite_sheet_loader[update_data.path] = SpriteSheetLoader(update_data.path)
 
-                if update_data.type == "sprite":
-                    coordinates = update_data.sprite_coordinates
-                else:  # update_data.type == "animation"
-                    coordinates = update_data.animation_coordinates[update_data.current_image]
-
+                coordinates = update_data.sprite_coordinates
                 sprite = sprite_sheet.get_sprite(*coordinates, scale_by=update_data.image_scale, rotate_degrees=update_data.image_rotation,
                                                  mirror_x=update_data.image_mirrored_x, mirror_y=update_data.image_mirrored_y)
                 update_data.update(obj=sprite)

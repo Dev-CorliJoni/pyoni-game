@@ -1,5 +1,5 @@
-from pyonigame.components.controls.validators.regex_validator import _is_float
-from pyonigame.components.controls.validators import IntValidator
+from models.components.validators.regex_validator import _is_float
+from models.components.validators import IntValidator
 
 
 class FloatValidator(IntValidator):

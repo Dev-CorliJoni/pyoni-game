@@ -1,7 +1,7 @@
 from functools import partial
 
 from pyonigame.components.core import Rect, Text
-from pyonigame.components.controls.validators import StringValidator
+from pyonigame.models.components.validators import StringValidator
 
 
 class Style:

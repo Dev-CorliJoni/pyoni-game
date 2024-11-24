@@ -1,4 +1,9 @@
+from typing import Callable
+
+from pyonigame.components.base import EventBase
+from pyonigame.events import Event
 from pyonigame.components.core import AlignableText, Rect
+from pyonigame.components.event_forwarder import create_child_component_type, ParentComponent
 
 
 class Style:
@@ -21,40 +26,37 @@ class Style:
         return Style(font, size, (205, 133, 63), (255, 245, 238), (139, 69, 19), **kwargs)
 
 
-class AdvancedText:
+class AdvancedText(ParentComponent):
 
     Layer = AlignableText.Layer
 
-    def __init__(self, text: str, style, x_percent, y_percent, height_percent, get_font_dimension, get_dimension, layer=AlignableText.Layer.CONTROL):
-        self.get_dimension = get_dimension
+    def __init__(self, text: str, style, x_percent, y_percent, height_percent, layer=AlignableText.Layer.CONTROL, event_subscription: Event = Event.NONE):
         self.style = style
-
         self._height_percent = height_percent
 
-        self.text = AlignableText(text, style.font, style.size, style.text_color, x_percent, y_percent, get_font_dimension, get_dimension, layer=layer)
+        text_type = create_child_component_type(AlignableText)
+        self.text = text_type(self, text, style.font, style.size, style.text_color, x_percent, y_percent, layer, event_subscription)
         self.rect = Rect(0, 0, 0, 0, style.background_color, border_color=style.border_color, layer=layer, border_radius=style.border_radius, border_width=style.border_width)
 
-    @property
-    def any_state_changed(self):
-        return self.text.state_changed or self.rect.state_changed
-
-    @any_state_changed.setter
-    def any_state_changed(self, value):
-        self.text.state_changed = value
-        self.rect.state_changed = value
-
     def update(self, inputs, **kwargs):
-        self.set_text_form(supress_coordinate_reset=True)
-        text_update = self.text.update(inputs, post_change_func=self.set_coordinates, **kwargs)
+        # Todo Remove self.set_text_form(supress_coordinate_reset=True)
+        text_update = self.text.update(inputs)  # Todo Remove, post_change_func=self.set_coordinates, **kwargs)
         return [self.rect.update(inputs), text_update]
 
+    def screen_size_changed(self, child: EventBase, width: int, height: int):
+        self.text.resize_by_height(height * self._height_percent)
+
+    def resolve_text_shape(self, child: EventBase, get_font_shape: Callable[[str, str, int], tuple[int, int]]):
+        self.set_coordinates()
+
     def set_text_form(self, supress_coordinate_reset=False):
-        self.text.resize(self.text.width + 100, self.get_dimension().height * self._height_percent)
+        # Todo is method still necessary ?
+        self.text.resize_by_height(self.settings.view.dimension.height * self._height_percent)
         if supress_coordinate_reset is False:
-            self.text.set_calculate_relative_coordinates()
+            self.text.set_relative_coordinates()
 
     def set_coordinates(self):
-        dimension = self.get_dimension()
+        dimension = self.settings.view.dimension
         txt_width, txt_height = self.text.width, self.text.height
 
         y_padding = self.style.padding / 8
@@ -75,6 +77,15 @@ class AdvancedText:
             self.rect.y = y_padding
 
         self.text.set(self.x + self.style.padding, self.y + y_padding)
+
+    @property
+    def any_state_changed(self):
+        return self.text.state_changed or self.rect.state_changed
+
+    @any_state_changed.setter
+    def any_state_changed(self, value):
+        self.text.state_changed = value
+        self.rect.state_changed = value
 
     @property
     def x(self):

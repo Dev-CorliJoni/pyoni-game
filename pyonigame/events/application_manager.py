@@ -32,10 +32,7 @@ class ApplicationManager:
             inputs.insert(0, event)
 
         ApplicationManager.UPCOMING_EVENTS.clear()
-
         requests = list(ApplicationManager.REQUESTS.values())
-        ApplicationManager.REQUESTS.clear()
-        Request.COUNTER = 0
 
         for input_ in inputs:
             if input_.type == "quit":
@@ -45,6 +42,7 @@ class ApplicationManager:
                     for requester, request in requests:
                         if request.type == RequestType.TEXT_SHAPE_RESOLVER:
                             requester.resolve_text_shape(input_.value)
+                            del ApplicationManager.REQUESTS[request.id]
             else:
                 if input_.type == "screen_size":
                     ApplicationManager.SETTINGS.view.dimension.set_dimension(input_.width, input_.height)
@@ -55,6 +53,9 @@ class ApplicationManager:
 
                         for obj in sorted_subscriptions:
                             ApplicationManager._trigger(e, obj, input_)
+
+        if len(ApplicationManager.REQUESTS) == 0:
+            Request.COUNTER = 0
 
     @staticmethod
     def generate_requests() -> list[DictObject]:

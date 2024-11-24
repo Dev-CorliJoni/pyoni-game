@@ -1,10 +1,12 @@
 from typing import Callable
+
+from pyonigame.models.components import Font
 from pyonigame.components.base import EventBase, ColorBase, ShapeBase, CoordinateBase
 from pyonigame.events import Event
 
 
 class Text(EventBase, CoordinateBase, ShapeBase, ColorBase):
-    def __init__(self, text, font, size, color: tuple[float, float, float], x, y, layer=EventBase.Layer.CONTROL, event_subscription: Event = Event.NONE, bold=False):
+    def __init__(self, text: str, font: Font, size: int, color: tuple[float, float, float], x, y, layer=EventBase.Layer.CONTROL, event_subscription: Event = Event.NONE, bold=False):
         super().__init__("text", layer, event_subscription)
         CoordinateBase.__init__(self, x, y)
         ShapeBase.__init__(self, 0, 0)
@@ -41,11 +43,16 @@ class Text(EventBase, CoordinateBase, ShapeBase, ColorBase):
                     break
 
     def resize(self, width, height):
-        self._resize_target = width, height
-        self.request_text_shape_resolver()
+        if self._resize_target != (width, height):
+            self._resize_target = width, height
+            self.request_text_shape_resolver()
 
-    def update(self, passed_time):
+    def resize_by_height(self, height):
+        if self._resize_target is None or self._resize_target != (self._resize_target[0], height):
+            self._resize_target = self.settings.view.dimension.width, height
+            self.request_text_shape_resolver()
+
+    def update(self, passed_time: float):
         data = super().update(passed_time)
         data.font = self.font.value
         return data
-

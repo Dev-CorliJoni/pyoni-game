@@ -42,7 +42,7 @@ class Base:
         if key != 'state_changed' and not key.startswith('_'):
             self.state_changed = True
 
-    def update(self, passed_time, post_change_func=lambda: None):
+    def update(self, passed_time: float, post_change_func=lambda: None):
         """
         Updates the object and generates a DictObject representation of its state.
 
