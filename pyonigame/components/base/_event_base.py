@@ -43,6 +43,19 @@ class EventBase(Base, RequestProvider):
         """
         ApplicationManager.set_event_subscription(self, event_subscription)
 
+    def focus(self):
+        """
+        Sets focus to the current object.
+        """
+        return ApplicationManager.focus_events(Event.FOCUS, self, -1, -1)
+
+    @property
+    def is_focused(self):
+        """
+        Indicates whether the element is currently focused.
+        """
+        return ApplicationManager.FOCUSED_OBJECT is self
+
     def request_text_shape_resolver(self):
         """
         This method can be called by derived classes to calculate the width and height of a text on the UI.
@@ -119,7 +132,7 @@ class EventBase(Base, RequestProvider):
         """
         pass
 
-    def focus(self, mouse_x: int, mouse_y: int):
+    def on_focus(self, mouse_x: int, mouse_y: int):
         """
         Invoked when object is focused.
 

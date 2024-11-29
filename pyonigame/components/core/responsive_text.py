@@ -5,7 +5,7 @@ from pyonigame.events import Event
 from pyonigame.components.core import Text
 
 
-class AlignableText(Text):
+class ResponsiveText(Text):
     def __init__(self, text, font, size, color: tuple[float, float, float], x_percent: float, y_percent: float, layer=Text.Layer.CONTROL, event_subscription: Event = Event.NONE):
         super().__init__(text, font, size, color, 0, 0, layer=layer, event_subscription=event_subscription | Event.SCREEN_SIZE_CHANGED)
         self._x_percent = float(x_percent)
@@ -21,10 +21,10 @@ class AlignableText(Text):
         super().resolve_text_shape(get_font_shape)
         self.set_relative_coordinates()
 
-    def update(self, inputs):  # Todo remove if it works without this > , supress_coordinate_reset=False, **kwargs):
+    def update(self, passed_time: float):  # Todo remove if it works without this > , supress_coordinate_reset=False, **kwargs):
         # Todo remove if it works in Button without this Functionality
         # if supress_coordinate_reset is False:
         #    self.set_relative_coordinates()
-        update_obj = super().update(inputs)  # Todo remove if it works without this > , **kwargs)
+        update_obj = super().update(passed_time)  # Todo remove if it works without this -> , **kwargs)
         return update_obj
 

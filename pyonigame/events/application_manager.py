@@ -200,7 +200,7 @@ class ApplicationManager:
             elif _event_match(event, Event.MOUSE):
                 obj.left_click(mouse_x, mouse_y)
 
-            ApplicationManager._focus_events(event, obj, mouse_x, mouse_y)
+            ApplicationManager.focus_events(event, obj, mouse_x, mouse_y)
 
         elif value == "middle" and _event_match(event, Event.MOUSE):
             obj.middle_click(mouse_x, mouse_y)
@@ -210,7 +210,7 @@ class ApplicationManager:
 
     @staticmethod
     def _tab_switch_focus(event: Event, obj, event_arg) -> None:
-        if ApplicationManager.FOCUSED_OBJECT == obj:
+        if ApplicationManager.FOCUSED_OBJECT is obj:
             keys = list(ApplicationManager.EVENT_SUBSCRIPTIONS[event].keys())
 
             index = keys.index(obj.id)
@@ -218,16 +218,17 @@ class ApplicationManager:
             new_key = keys[new_index]
 
             new_focused_object = ApplicationManager.EVENT_SUBSCRIPTIONS[event][new_key]
-            ApplicationManager._focus_events(event, new_focused_object, -1, -1)
+            ApplicationManager.focus_events(event, new_focused_object, -1, -1)
+            # Set is_tab_used in order to prevent switching focus multiple times
             event_arg.is_tab_used = True
 
     @staticmethod
-    def _focus_events(event: Event, obj, mouse_x, mouse_y) -> None:
+    def focus_events(event: Event, obj, mouse_x, mouse_y) -> None:
 
         if _event_match(event, Event.FOCUS):
             if ApplicationManager.FOCUSED_OBJECT is not None:
                 # If another clickable object is clicked
                 ApplicationManager.FOCUSED_OBJECT.lost_focus()
 
-            obj.focus(mouse_x, mouse_y)
+            obj.on_focus(mouse_x, mouse_y)
             ApplicationManager.FOCUSED_OBJECT = obj

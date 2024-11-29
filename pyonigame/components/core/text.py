@@ -43,14 +43,12 @@ class Text(EventBase, CoordinateBase, ShapeBase, ColorBase):
                     break
 
     def resize(self, width, height):
-        if self._resize_target != (width, height):
+        if self._resize_target is None or self._resize_target != (width, height):
             self._resize_target = width, height
             self.request_text_shape_resolver()
 
     def resize_by_height(self, height):
-        if self._resize_target is None or self._resize_target != (self._resize_target[0], height):
-            self._resize_target = self.settings.view.dimension.width, height
-            self.request_text_shape_resolver()
+        self.resize(self.settings.view.dimension.width, height)
 
     def update(self, passed_time: float):
         data = super().update(passed_time)

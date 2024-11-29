@@ -1,5 +1,6 @@
 from typing import Callable
 
+from pyonigame.components.core import Text
 from pyonigame.components.base import EventBase
 from pyonigame.events import RequestProvider
 from pyonigame.models.settings import Theme, Language
@@ -34,7 +35,7 @@ class ParentComponent(RequestProvider):
             def left_click(self, child, mouse_x, mouse_y):
                 print(f"{child.id} clicked at ({mouse_x}, {mouse_y})")
     """
-    def resolve_text_shape(self, child: EventBase, get_font_shape: Callable[[str, str, int], tuple[int, int]]):
+    def resolve_text_shape(self, child: Text, get_font_shape: Callable[[str, str, int], tuple[int, int]]):
         pass
 
     def theme_changed(self, child: EventBase, theme: Theme):
@@ -58,7 +59,7 @@ class ParentComponent(RequestProvider):
     def hover(self, child: EventBase, mouse_x: int, mouse_y: int):
         pass
 
-    def focus(self, child: EventBase, mouse_x: int, mouse_y: int):
+    def on_focus(self, child: EventBase, mouse_x: int, mouse_y: int):
         pass
 
     def lost_focus(self, child: EventBase):

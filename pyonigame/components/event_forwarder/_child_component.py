@@ -45,7 +45,7 @@ def child_component(cls: Type[EventBase]):
 
     for method in ('resolve_text_shape', 'theme_changed', 'language_changed', 'screen_size_changed',
                    'left_click', 'middle_click', 'right_click', 'hover',
-                   'focus', 'lost_focus',
+                   'on_focus', 'lost_focus',
                    'drag_start', 'dragging', 'drop',
                    'scroll_up', 'scroll_down',
                    'key_press', 'key_release'):

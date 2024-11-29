@@ -26,7 +26,7 @@ class PygameObserver(UIObserver):
 
         self._fps: int = 60
         self._vsync: bool = False
-        self._refresh: bool = True
+        self._refresh: bool = False
         self._provide_text_shape_resolver: bool = False
 
         self._screen_changed = None
@@ -91,12 +91,15 @@ class PygameObserver(UIObserver):
         pygame.display.set_caption(settings.caption)
         self._clock = pygame.time.Clock()
         self.opened = True
+        self._refresh = True
 
     def get_inputs(self) -> Generator[DictObject, None, None]:
         clicked, click_released, scroll = ("",) * 3
         events = pygame.event.get()
 
         if self._provide_text_shape_resolver:
+            # refresh because the texts will usually move after the text dimensions are calculated
+            self._refresh = True
             self._provide_text_shape_resolver = False
             yield DictObject({"type": "request_answer", "answer_type": "text_shape_resolver", "value": self.get_font_dimension})
 

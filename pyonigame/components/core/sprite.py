@@ -10,9 +10,11 @@ class Sprite(ImageBase):
     def __init__(self, x, y, sprite_data: SpriteData, layer=ImageBase.Layer.GAME_ELEMENT, event_subscription: Event = Event.NONE, scale_factor=1):
         sprite_coordinates = sprite_data.locator_tuple()
         if sprite_data.is_locator_empty():
-            width, height = Image.open(sprite_data.image_path).size
+            with Image.open(sprite_data.image_path) as image:
+                width, height = image.size
             width, height = width * scale_factor, height * scale_factor
             sprite_coordinates = (0, 0, width, height)
+
         elif sprite_data.is_locator_valid():
             width, height = sprite_coordinates[2] * scale_factor, sprite_coordinates[3] * scale_factor
         else:

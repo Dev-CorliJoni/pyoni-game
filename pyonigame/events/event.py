@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import Flag, auto
 
 
@@ -26,3 +27,15 @@ class Event(Flag):
     COLLISION = auto()
 
     ALL = THEME_CHANGED | LANGUAGE_CHANGED | SCREEN_SIZE_CHANGED | KEY | MOUSE | FOCUS | DRAG_AND_DROP | COLLISION
+
+    def add(self, *events: Event) -> Event:
+        event = self
+        for flag in events:
+            event |= flag
+        return event
+
+    def subtract(self, *events: Event) -> Event:
+        event = self
+        for flag in events:
+            event &= ~flag
+        return event

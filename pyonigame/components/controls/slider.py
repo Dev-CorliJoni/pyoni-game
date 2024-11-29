@@ -63,9 +63,9 @@ class Slider(TextBox):
         super().resize(width, height)
         self.buttons_resize((self._buttons[0].width, height), (self._buttons[1].width, height))
 
-    def focus(self, pos):
+    def on_focus(self, pos):
         if self.x + self._buttons[0].width < pos[0] < self.x + self.width - self._buttons[0].width:
-            super().focus(pos)
+            super().on_focus(pos)
 
     def align_text(self):
         if self._is_centered:

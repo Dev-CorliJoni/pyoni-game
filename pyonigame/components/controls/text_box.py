@@ -46,7 +46,7 @@ class TextBox(Rect):
     KEY_PRESS_INTERVAL = 0.3
 
     def __init__(self, x, y, width, height, style, get_font_dimension, validator=StringValidator(), enter_func=lambda _: None, text="", hint="", layer=Rect.Layer.CONTROL, select_key_mode=False):
-        super().__init__(x, y, width, height, style.background_color, border_color=style.border_color, layer=layer, border_radius=style.border_radius, click_event=self.focus)
+        super().__init__(x, y, width, height, style.background_color, border_color=style.border_color, layer=layer, border_radius=style.border_radius, click_event=self.on_focus)
         self.lost_focus_event = self.lost_focus
         self._validator = validator
         self._is_valid = True
@@ -131,7 +131,7 @@ class TextBox(Rect):
         self._active = False
         self.state_changed = True
 
-    def focus(self, pos):
+    def on_focus(self, pos):
         if self.x < pos[0] < self.x + self.width and self.is_editable:
             self._active = True
             relative_x = pos[0] - self._padded_x_start
